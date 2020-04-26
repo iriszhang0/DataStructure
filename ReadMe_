@@ -1,0 +1,890 @@
+ReadMe:
+
+The overall structure of our programming:
+
+We divide the project into eight classes. In the following, we will explain the function of each class.
+
+1）Tuple
+a. We define six private fields, four of which are the characteristics of the Tuple. 
+b. In order to get and modify them, we define getter and setter methods. c. For the purpose of comparison, we define a Compare method which first based on the priority of the Tuple to return True/False, if the priorities of the two Tuple are the same, we compare the insertion time. 
+d. In order to print the required format, we write a ToString()method to simple print the Tuple. 
+
+2) SortedUnboundedArray
+a. We define our own sorted unbounded array without using Java Built-in. 
+b. We define method reallocate() to grow the size of the array, grow() to add element to the array, shrink() to delete element of the array, sort()to sort the array. And each time we add element to the array, we will sort it so that deletion becomes simple, we just delete the "largest" element in the array.
+
+3) LinkedList 
+a. We define our own linked list without using Java Built-in. 
+b. We define getter and setter to get and modify the fields.
+c. We define size() to get the current size of the linkedlist, FindAt(i) to find the element at the index i, FindKey(k) to find the node which key is k, InsertPlace(k) to find the place that k should be inserted in so that the linkedlist is sorted. 
+d. For insertion and deletion, we both put them into two different cases: at head and elsewhere. In order to insert, we write a helper method getPred() to find the predecessor of the current Node. 
+e. After each insertion, we add 1 to the currentsize; after each deletion, we minus 1 to the currentsize. 
+
+4)HashTable 
+a. We define our own hash table without using Java Built-in. 
+b. We define size() to return the number of current elements in the hash table. 
+c. In order to delete, we write the helper method FindMax() to return the maximum element in the hash table, in which we first use FindFirst() to find the first element in the table. 
+d. For insertion, we always insert the element in the head. 
+e. After each insertion, we add 1 to the currentsize; after each deletion, we minus 1 to the currentsize. 
+
+5)PriorityQueue
+a. We define our own priority queue without using Java Built-in. 
+b. In order to make the heap, we write SiftDown() to sort the heap.
+c. Each time we do the insertion or deletion we will get a heap. 
+d.We define Getnumitem() to return the number of current elements in the hash table. 
+e. After each insertion, we add 1 to the currentsize; after each deletion, we minus 1 to the currentsize. 
+
+6)Generator 
+First, we define a constructor that initializes varibales and take in parameters. 
+Then, to generate requests, we write a method. In this method, we first check which data structure is used. Then, we check whether all processes are blocked. If they are all blocked or the data struture is full, we will let generator sleep. After that, we start to generate request. 
+First, we check whether we get the total number of requests and if the generator needs to sleep (two situations). Then, for each batch, we randomly generate requests with same insertion time and we will get a different random process_id for each request and non of them are the same as the one already in the data structure. Then, we insert the request into the data structure by calling the method defined in our own data structure. Then, we will write the current characteristics of the request (Tuple) to the output file. After each batch, we let the generator sleep for a random time up to 100ms. We keep on generating request until it has enough requests. 
+
+7) Scheduler
+The same as generator, we define a constructor that initializes varibales and take in parameters.
+Then, to process requests, we write a method. In this method, we first check which data structure is used. Then, we check whether the data structure is empty. If not, we delete the maximum element in the data structure. If the resource is avaiable, we will first make it unavaiable and then spawn a thread and let it sleep for the required time. Both the start and end of this thread, we will write the current characteristics of the request (Tuple) to the output file. Repeat this process until the number of requests is completed. 
+
+8)Application 
+In the application class, we mainly build the main method to run the program. First, we declare four data structure and initialize them. Then, we create an array to store resources, the index shows the number of resource. The value stored in the array shows whether the resource is available(0) or occupied(1) and we initialize to be all available. Then, we create an array to show the accessibility of the processor_id and initialize to 0 to indicate available. At last, we spawn the threads to run generator and scheduler. 
+
+
+=========================================================================================================================================================
+=========================================================================================================================================================
+
+The examples of our trial:
+We do two experiments in different data structure.
+
+Simple cases:
+
+1)SortedUnboundedArray:
+The command line argument is "8 30 20 SortedUnboundedArray result1"
+We get the file whose output are: 
+Generated request: 31 5 5 64 at 2019/07/12 15:26:41
+Generated request: 135 1 4 822 at 2019/07/12 15:26:41
+Generated request: 98 8 2 73 at 2019/07/12 15:26:41
+Generated request: 327 6 9 847 at 2019/07/12 15:26:41
+Generated request: 741 8 6 630 at 2019/07/12 15:26:41
+Generated request: 53 4 4 930 at 2019/07/12 15:26:41
+Generated request: 882 7 5 25 at 2019/07/12 15:26:42
+Generated request: 961 8 1 95 at 2019/07/12 15:26:42
+Generated request: 653 6 2 417 at 2019/07/12 15:26:42
+Generated request: 405 6 9 798 at 2019/07/12 15:26:42
+Generated request: 913 5 6 385 at 2019/07/12 15:26:42
+Generated request: 117 5 9 412 at 2019/07/12 15:26:42
+Generated request: 625 5 1 677 at 2019/07/12 15:26:42
+Generated request: 718 3 7 660 at 2019/07/12 15:26:42
+Generated request: 518 2 8 790 at 2019/07/12 15:26:42
+Generated request: 418 6 4 693 at 2019/07/12 15:26:42
+Started to process request: 327 6 9 847 at 2019/07/12 15:26:42
+Generated request: 532 7 2 714 at 2019/07/12 15:26:42
+Generated request: 806 2 10 624 at 2019/07/12 15:26:42
+Generated request: 506 2 5 539 at 2019/07/12 15:26:42
+Generated request: 217 3 4 917 at 2019/07/12 15:26:42
+Finished to process request: 327 6 9 847 at 2019/07/12 15:26:43
+Started to process request: 806 2 10 624 at 2019/07/12 15:26:43
+Finished to process request: 806 2 10 624 at 2019/07/12 15:26:44
+Started to process request: 405 6 9 798 at 2019/07/12 15:26:44
+Finished to process request: 405 6 9 798 at 2019/07/12 15:26:45
+Started to process request: 117 5 9 412 at 2019/07/12 15:26:45
+Finished to process request: 117 5 9 412 at 2019/07/12 15:26:45
+Started to process request: 518 2 8 790 at 2019/07/12 15:26:45
+Finished to process request: 518 2 8 790 at 2019/07/12 15:26:46
+Started to process request: 718 3 7 660 at 2019/07/12 15:26:46
+Finished to process request: 718 3 7 660 at 2019/07/12 15:26:46
+Started to process request: 741 8 6 630 at 2019/07/12 15:26:46
+Finished to process request: 741 8 6 630 at 2019/07/12 15:26:47
+Started to process request: 913 5 6 385 at 2019/07/12 15:26:47
+Finished to process request: 913 5 6 385 at 2019/07/12 15:26:48
+Started to process request: 31 5 5 64 at 2019/07/12 15:26:48
+Finished to process request: 31 5 5 64 at 2019/07/12 15:26:48
+Started to process request: 882 7 5 25 at 2019/07/12 15:26:48
+Finished to process request: 882 7 5 25 at 2019/07/12 15:26:48
+Started to process request: 506 2 5 539 at 2019/07/12 15:26:48
+Finished to process request: 506 2 5 539 at 2019/07/12 15:26:48
+Started to process request: 53 4 4 930 at 2019/07/12 15:26:48
+Finished to process request: 53 4 4 930 at 2019/07/12 15:26:49
+Started to process request: 135 1 4 822 at 2019/07/12 15:26:49
+Finished to process request: 135 1 4 822 at 2019/07/12 15:26:50
+Started to process request: 418 6 4 693 at 2019/07/12 15:26:50
+Finished to process request: 418 6 4 693 at 2019/07/12 15:26:51
+Started to process request: 217 3 4 917 at 2019/07/12 15:26:51
+Finished to process request: 217 3 4 917 at 2019/07/12 15:26:52
+Started to process request: 98 8 2 73 at 2019/07/12 15:26:52
+Finished to process request: 98 8 2 73 at 2019/07/12 15:26:52
+Started to process request: 653 6 2 417 at 2019/07/12 15:26:52
+Finished to process request: 653 6 2 417 at 2019/07/12 15:26:52
+Started to process request: 532 7 2 714 at 2019/07/12 15:26:52
+Finished to process request: 532 7 2 714 at 2019/07/12 15:26:53
+Started to process request: 961 8 1 95 at 2019/07/12 15:26:53
+Finished to process request: 961 8 1 95 at 2019/07/12 15:26:53
+Started to process request: 625 5 1 677 at 2019/07/12 15:26:53
+Finished to process request: 625 5 1 677 at 2019/07/12 15:26:54
+
+==========================================================================
+
+Then we try the command line argument "6 10 4 SortedUnboundedArray result2"
+The file we get shows:
+Generated request: 169 2 4 745 at 2019/07/12 15:18:17
+Generated request: 867 1 1 583 at 2019/07/12 15:18:17
+Generated request: 856 4 8 163 at 2019/07/12 15:18:17
+Generated request: 479 1 1 613 at 2019/07/12 15:18:17
+Started to process request: 856 4 8 163 at 2019/07/12 15:18:18
+Finished to process request: 856 4 8 163 at 2019/07/12 15:18:19
+Started to process request: 169 2 4 745 at 2019/07/12 15:18:19
+Finished to process request: 169 2 4 745 at 2019/07/12 15:18:19
+Started to process request: 867 1 1 583 at 2019/07/12 15:18:19
+Finished to process request: 867 1 1 583 at 2019/07/12 15:18:20
+Started to process request: 479 1 1 613 at 2019/07/12 15:18:20
+Finished to process request: 479 1 1 613 at 2019/07/12 15:18:20
+
+====================================================================================================================================================
+
+2) LinkedList
+The command line argument is "6 10 4 LinkedList result1"
+The file we get shows:
+Generated request: 463 2 4 367 at 2019/07/12 15:49:27
+Generated request: 917 3 10 990 at 2019/07/12 15:49:27
+Generated request: 811 4 1 979 at 2019/07/12 15:49:27
+Generated request: 22 4 3 2 at 2019/07/12 15:49:27
+Finished to process request: 917 3 10 990 at 2019/07/12 15:49:29
+Finished to process request: 463 2 4 367 at 2019/07/12 15:49:29
+Finished to process request: 22 4 3 2 at 2019/07/12 15:49:29
+Finished to process request: 811 4 1 979 at 2019/07/12 15:49:30
+
+===================================================================
+
+Another try is "8 30 20 LinkedList result2"
+The file we get shows:
+Generated request: 363 6 7 573 at 2019/07/12 15:50:25
+Generated request: 150 8 4 721 at 2019/07/12 15:50:25
+Generated request: 418 7 8 341 at 2019/07/12 15:50:25
+Generated request: 10 7 8 273 at 2019/07/12 15:50:25
+Generated request: 801 1 5 726 at 2019/07/12 15:50:25
+Generated request: 421 4 3 24 at 2019/07/12 15:50:25
+Generated request: 794 5 2 424 at 2019/07/12 15:50:25
+Generated request: 756 7 5 131 at 2019/07/12 15:50:25
+Generated request: 849 5 9 18 at 2019/07/12 15:50:25
+Generated request: 372 2 2 249 at 2019/07/12 15:50:25
+Generated request: 520 3 8 530 at 2019/07/12 15:50:25
+Generated request: 800 5 9 116 at 2019/07/12 15:50:25
+Generated request: 239 1 6 156 at 2019/07/12 15:50:25
+Generated request: 573 7 9 778 at 2019/07/12 15:50:25
+Generated request: 368 8 8 55 at 2019/07/12 15:50:25
+Generated request: 157 7 4 930 at 2019/07/12 15:50:25
+Generated request: 768 2 1 416 at 2019/07/12 15:50:25
+Generated request: 313 3 7 416 at 2019/07/12 15:50:25
+Generated request: 335 2 10 541 at 2019/07/12 15:50:25
+Generated request: 783 4 3 787 at 2019/07/12 15:50:25
+Generated request: 964 6 8 947 at 2019/07/12 15:50:25
+Finished to process request: 335 2 10 541 at 2019/07/12 15:50:26
+Finished to process request: 849 5 9 18 at 2019/07/12 15:50:26
+Finished to process request: 800 5 9 116 at 2019/07/12 15:50:26
+Finished to process request: 573 7 9 778 at 2019/07/12 15:50:27
+Finished to process request: 10 7 8 273 at 2019/07/12 15:50:27
+Finished to process request: 418 7 8 341 at 2019/07/12 15:50:28
+Finished to process request: 520 3 8 530 at 2019/07/12 15:50:28
+Finished to process request: 368 8 8 55 at 2019/07/12 15:50:28
+Finished to process request: 964 6 8 947 at 2019/07/12 15:50:29
+Finished to process request: 363 6 7 573 at 2019/07/12 15:50:30
+Finished to process request: 313 3 7 416 at 2019/07/12 15:50:30
+Finished to process request: 239 1 6 156 at 2019/07/12 15:50:30
+Finished to process request: 801 1 5 726 at 2019/07/12 15:50:31
+Finished to process request: 756 7 5 131 at 2019/07/12 15:50:31
+Finished to process request: 150 8 4 721 at 2019/07/12 15:50:32
+Finished to process request: 157 7 4 930 at 2019/07/12 15:50:33
+Finished to process request: 421 4 3 24 at 2019/07/12 15:50:33
+Finished to process request: 783 4 3 787 at 2019/07/12 15:50:34
+Finished to process request: 794 5 2 424 at 2019/07/12 15:50:34
+Finished to process request: 372 2 2 249 at 2019/07/12 15:50:34
+Finished to process request: 768 2 1 416 at 2019/07/12 15:50:35
+====================================================================================================================================================
+
+3)HashTable 
+First, we try "8 20 30 HashTable result2" 
+We get the output like:
+Generated request: 486 6 3 927 at 2019/07/12 16:10:24
+Generated request: 99 6 5 405 at 2019/07/12 16:10:24
+Generated request: 122 6 1 367 at 2019/07/12 16:10:24
+Generated request: 799 1 3 57 at 2019/07/12 16:10:24
+Generated request: 675 1 3 614 at 2019/07/12 16:10:24
+Generated request: 85 3 5 987 at 2019/07/12 16:10:24
+Generated request: 350 1 1 32 at 2019/07/12 16:10:24
+Generated request: 312 8 9 464 at 2019/07/12 16:10:24
+Generated request: 228 1 9 48 at 2019/07/12 16:10:24
+Generated request: 672 5 3 844 at 2019/07/12 16:10:25
+Generated request: 325 3 10 412 at 2019/07/12 16:10:25
+Generated request: 854 5 10 384 at 2019/07/12 16:10:25
+Generated request: 60 2 8 416 at 2019/07/12 16:10:25
+Generated request: 82 4 10 192 at 2019/07/12 16:10:25
+Generated request: 560 8 3 516 at 2019/07/12 16:10:25
+Generated request: 682 1 9 273 at 2019/07/12 16:10:25
+Started to process request: 350 1 1 32 at 2019/07/12 16:10:25
+Generated request: 746 7 8 326 at 2019/07/12 16:10:25
+Finished to process request: 350 1 1 32 at 2019/07/12 16:10:25
+Started to process request: 122 6 1 367 at 2019/07/12 16:10:25
+Generated request: 58 3 3 75 at 2019/07/12 16:10:25
+Generated request: 218 6 9 879 at 2019/07/12 16:10:25
+Generated request: 833 6 10 811 at 2019/07/12 16:10:25
+Finished to process request: 122 6 1 367 at 2019/07/12 16:10:25
+Started to process request: 58 3 3 75 at 2019/07/12 16:10:25
+Finished to process request: 58 3 3 75 at 2019/07/12 16:10:26
+Started to process request: 560 8 3 516 at 2019/07/12 16:10:26
+Finished to process request: 560 8 3 516 at 2019/07/12 16:10:26
+Started to process request: 672 5 3 844 at 2019/07/12 16:10:26
+Finished to process request: 672 5 3 844 at 2019/07/12 16:10:27
+Started to process request: 675 1 3 614 at 2019/07/12 16:10:27
+Finished to process request: 675 1 3 614 at 2019/07/12 16:10:28
+Started to process request: 486 6 3 927 at 2019/07/12 16:10:28
+Finished to process request: 486 6 3 927 at 2019/07/12 16:10:28
+Started to process request: 85 3 5 987 at 2019/07/12 16:10:28
+Finished to process request: 85 3 5 987 at 2019/07/12 16:10:29
+Started to process request: 99 6 5 405 at 2019/07/12 16:10:29
+Finished to process request: 99 6 5 405 at 2019/07/12 16:10:30
+Started to process request: 746 7 8 326 at 2019/07/12 16:10:30
+Finished to process request: 746 7 8 326 at 2019/07/12 16:10:30
+Started to process request: 60 2 8 416 at 2019/07/12 16:10:30
+Finished to process request: 60 2 8 416 at 2019/07/12 16:10:31
+Started to process request: 218 6 9 879 at 2019/07/12 16:10:31
+Finished to process request: 218 6 9 879 at 2019/07/12 16:10:32
+Started to process request: 682 1 9 273 at 2019/07/12 16:10:32
+Finished to process request: 682 1 9 273 at 2019/07/12 16:10:32
+Started to process request: 228 1 9 48 at 2019/07/12 16:10:32
+Finished to process request: 228 1 9 48 at 2019/07/12 16:10:32
+Started to process request: 799 1 3 57 at 2019/07/12 16:10:32
+Finished to process request: 799 1 3 57 at 2019/07/12 16:10:32
+Started to process request: 312 8 9 464 at 2019/07/12 16:10:32
+Finished to process request: 312 8 9 464 at 2019/07/12 16:10:32
+Started to process request: 833 6 10 811 at 2019/07/12 16:10:32
+Finished to process request: 833 6 10 811 at 2019/07/12 16:10:33
+Started to process request: 82 4 10 192 at 2019/07/12 16:10:33
+Finished to process request: 82 4 10 192 at 2019/07/12 16:10:33
+Started to process request: 854 5 10 384 at 2019/07/12 16:10:33
+Finished to process request: 854 5 10 384 at 2019/07/12 16:10:34
+Started to process request: 325 3 10 412 at 2019/07/12 16:10:34
+Finished to process request: 325 3 10 412 at 2019/07/12 16:10:34
+=======================================================================================================================================================
+
+Then, we try "6 10 4 HashTable result1"
+We get the output like:
+Generated request: 697 1 1 639 at 2019/07/12 17:07:44
+Generated request: 373 4 4 616 at 2019/07/12 17:07:44
+Generated request: 493 5 3 107 at 2019/07/12 17:07:44
+Generated request: 291 5 4 263 at 2019/07/12 17:07:44
+Started to process request: 697 1 1 639 at 2019/07/12 17:07:45
+Finished to process request: 697 1 1 639 at 2019/07/12 17:07:46
+Started to process request: 493 5 3 107 at 2019/07/12 17:07:46
+Finished to process request: 493 5 3 107 at 2019/07/12 17:07:46
+Started to process request: 373 4 4 616 at 2019/07/12 17:07:46
+Finished to process request: 373 4 4 616 at 2019/07/12 17:07:47
+Started to process request: 291 5 4 263 at 2019/07/12 17:07:47
+Finished to process request: 291 5 4 263 at 2019/07/12 17:07:47
+
+===============================================================================================================================================
+
+
+4)Priority Queue
+
+First, we try "6 10 4 PriorityQueue result1"
+We get the following output:
+Generated request: 566 3 8 523  at2019/07/12 17:26:15
+Generated request: 368 3 7 422  at2019/07/12 17:26:15
+Started to process request: 566 3 8 523  at2019/07/12 17:26:15
+Finished to process request: 566 3 8 523  at2019/07/12 17:26:15
+Generated request: 866 2 5 55  at2019/07/12 17:26:15
+Generated request: 278 1 3 493  at2019/07/12 17:26:15
+Started to process request: 368 3 7 422  at2019/07/12 17:26:15
+Finished to process request: 368 3 7 422  at2019/07/12 17:26:15
+Started to process request: 866 2 5 55  at2019/07/12 17:26:15
+Finished to process request: 866 2 5 55  at2019/07/12 17:26:15
+Started to process request: 278 1 3 493  at2019/07/12 17:26:15
+Finished to process request: 278 1 3 493  at2019/07/12 17:26:15
+
+========================================================================
+
+Then, we try "8 20 30 PriorityQueue result2"
+We get the output file like:
+Generated request: 142 7 7 706  at2019/07/12 17:43:52
+Generated request: 632 2 3 687  at2019/07/12 17:43:52
+Generated request: 681 7 5 817  at2019/07/12 17:43:52
+Generated request: 177 3 5 762  at2019/07/12 17:43:52
+Started to process request: 142 7 7 706  at2019/07/12 17:43:52
+Finished to process request: 142 7 7 706  at2019/07/12 17:43:52
+Generated request: 492 3 3 416  at2019/07/12 17:43:52
+Started to process request: 681 7 5 817  at2019/07/12 17:43:52
+Finished to process request: 681 7 5 817  at2019/07/12 17:43:52
+Generated request: 231 8 10 882  at2019/07/12 17:43:52
+Started to process request: 177 3 5 762  at2019/07/12 17:43:52
+Finished to process request: 177 3 5 762  at2019/07/12 17:43:52
+Generated request: 392 3 4 532  at2019/07/12 17:43:54
+Generated request: 700 8 8 352  at2019/07/12 17:43:54
+Started to process request: 231 8 10 882  at2019/07/12 17:43:52
+Finished to process request: 231 8 10 882  at2019/07/12 17:43:52
+Started to process request: 700 8 8 352  at2019/07/12 17:43:54
+Finished to process request: 700 8 8 352  at2019/07/12 17:43:54
+Generated request: 134 6 3 158  at2019/07/12 17:43:54
+Started to process request: 392 3 4 532  at2019/07/12 17:43:54
+Finished to process request: 392 3 4 532  at2019/07/12 17:43:54
+Generated request: 762 4 8 592  at2019/07/12 17:43:54
+Generated request: 711 6 10 711  at2019/07/12 17:43:56
+Started to process request: 632 2 3 687  at2019/07/12 17:43:52
+Finished to process request: 632 2 3 687  at2019/07/12 17:43:52
+Generated request: 174 7 8 396  at2019/07/12 17:43:56
+Started to process request: 711 6 10 711  at2019/07/12 17:43:56
+Finished to process request: 711 6 10 711  at2019/07/12 17:43:56
+Started to process request: 762 4 8 592  at2019/07/12 17:43:54
+Finished to process request: 762 4 8 592  at2019/07/12 17:43:54
+Generated request: 269 1 6 811  at2019/07/12 17:43:58
+Started to process request: 174 7 8 396  at2019/07/12 17:43:56
+Finished to process request: 174 7 8 396  at2019/07/12 17:43:56
+Generated request: 943 8 9 180  at2019/07/12 17:43:58
+Generated request: 978 8 10 32  at2019/07/12 17:43:58
+Generated request: 529 6 6 629  at2019/07/12 17:43:58
+Started to process request: 269 1 6 811  at2019/07/12 17:43:58
+Finished to process request: 269 1 6 811  at2019/07/12 17:43:58
+Generated request: 346 3 4 466  at2019/07/12 17:43:58
+Started to process request: 978 8 10 32  at2019/07/12 17:43:58
+Finished to process request: 978 8 10 32  at2019/07/12 17:43:58
+Started to process request: 943 8 9 180  at2019/07/12 17:43:58
+Finished to process request: 943 8 9 180  at2019/07/12 17:43:58
+Started to process request: 529 6 6 629  at2019/07/12 17:43:58
+Finished to process request: 529 6 6 629  at2019/07/12 17:43:58
+Generated request: 872 7 4 72  at2019/07/12 17:44:00
+Generated request: 635 8 7 747  at2019/07/12 17:44:00
+Started to process request: 346 3 4 466  at2019/07/12 17:43:58
+Finished to process request: 346 3 4 466  at2019/07/12 17:43:58
+Generated request: 716 5 1 672  at2019/07/12 17:44:00
+Started to process request: 635 8 7 747  at2019/07/12 17:44:00
+Finished to process request: 635 8 7 747  at2019/07/12 17:44:00
+Started to process request: 872 7 4 72  at2019/07/12 17:44:00
+Finished to process request: 872 7 4 72  at2019/07/12 17:44:00
+Started to process request: 492 3 3 416  at2019/07/12 17:43:52
+Finished to process request: 492 3 3 416  at2019/07/12 17:43:52
+Generated request: 933 6 5 286  at2019/07/12 17:44:02
+Started to process request: 134 6 3 158  at2019/07/12 17:43:54
+Finished to process request: 134 6 3 158  at2019/07/12 17:43:54
+Started to process request: 933 6 5 286  at2019/07/12 17:44:02
+Finished to process request: 933 6 5 286  at2019/07/12 17:44:02
+Generated request: 374 2 6 25  at2019/07/12 17:44:02
+Started to process request: 716 5 1 672  at2019/07/12 17:44:00
+Finished to process request: 716 5 1 672  at2019/07/12 17:44:00
+Started to process request: 374 2 6 25  at2019/07/12 17:44:02
+Finished to process request: 374 2 6 25  at2019/07/12 17:44:02
+
+====================================================================================================================================================
+===================================================================================================================================================
+To test the Out Of Bound case, we just exchange the maximum number of requests that the data structure can store. 
+
+1) SortedUnboundedArray
+case one: "6 4 10 SortedUnboundedArray result3"
+Generated request: 246 5 8 402 at 2019/07/12 17:28:15
+Generated request: 571 1 2 754 at 2019/07/12 17:28:15
+Generated request: 949 5 9 991 at 2019/07/12 17:28:15
+Generated request: 456 3 3 183 at 2019/07/12 17:28:15
+Generated request: 302 1 8 491 at 2019/07/12 17:28:15
+Generated request: 771 5 6 210 at 2019/07/12 17:28:15
+Generated request: 824 1 2 489 at 2019/07/12 17:28:15
+Generated request: 929 6 6 627 at 2019/07/12 17:28:15
+Generated request: 19 4 6 36 at 2019/07/12 17:28:15
+Generated request: 221 5 3 37 at 2019/07/12 17:28:15
+Started to process request: 949 5 9 991 at 2019/07/12 17:28:16
+Finished to process request: 949 5 9 991 at 2019/07/12 17:28:16
+Started to process request: 246 5 8 402 at 2019/07/12 17:28:16
+Finished to process request: 246 5 8 402 at 2019/07/12 17:28:17
+Started to process request: 302 1 8 491 at 2019/07/12 17:28:17
+Finished to process request: 302 1 8 491 at 2019/07/12 17:28:17
+Started to process request: 771 5 6 210 at 2019/07/12 17:28:17
+Finished to process request: 771 5 6 210 at 2019/07/12 17:28:18
+Started to process request: 929 6 6 627 at 2019/07/12 17:28:18
+Finished to process request: 929 6 6 627 at 2019/07/12 17:28:18
+Started to process request: 19 4 6 36 at 2019/07/12 17:28:18
+Finished to process request: 19 4 6 36 at 2019/07/12 17:28:18
+Started to process request: 456 3 3 183 at 2019/07/12 17:28:18
+Finished to process request: 456 3 3 183 at 2019/07/12 17:28:18
+Started to process request: 221 5 3 37 at 2019/07/12 17:28:18
+Finished to process request: 221 5 3 37 at 2019/07/12 17:28:19
+Started to process request: 571 1 2 754 at 2019/07/12 17:28:19
+Finished to process request: 571 1 2 754 at 2019/07/12 17:28:19
+Started to process request: 824 1 2 489 at 2019/07/12 17:28:19
+Finished to process request: 824 1 2 489 at 2019/07/12 17:28:20
+==========================================================================================
+
+case two: "8 20 30 SortedUnboundedArray result4"
+Generated request: 889 7 6 329 at 2019/07/12 17:29:22
+Generated request: 880 2 10 449 at 2019/07/12 17:29:22
+Generated request: 968 3 4 797 at 2019/07/12 17:29:22
+Generated request: 398 4 7 304 at 2019/07/12 17:29:22
+Generated request: 827 6 10 223 at 2019/07/12 17:29:23
+Generated request: 220 1 8 298 at 2019/07/12 17:29:23
+Generated request: 967 3 4 531 at 2019/07/12 17:29:23
+Generated request: 387 2 5 247 at 2019/07/12 17:29:23
+Generated request: 765 4 10 492 at 2019/07/12 17:29:23
+Generated request: 491 8 4 456 at 2019/07/12 17:29:23
+Generated request: 158 5 7 150 at 2019/07/12 17:29:23
+Generated request: 946 8 1 773 at 2019/07/12 17:29:23
+Generated request: 234 7 1 35 at 2019/07/12 17:29:23
+Generated request: 176 3 6 479 at 2019/07/12 17:29:23
+Generated request: 89 8 1 674 at 2019/07/12 17:29:23
+Started to process request: 880 2 10 449 at 2019/07/12 17:29:23
+Generated request: 801 4 3 942 at 2019/07/12 17:29:23
+Generated request: 301 1 9 190 at 2019/07/12 17:29:23
+Generated request: 658 1 4 436 at 2019/07/12 17:29:23
+Generated request: 345 8 1 274 at 2019/07/12 17:29:23
+Generated request: 383 4 9 760 at 2019/07/12 17:29:23
+Generated request: 406 8 9 487 at 2019/07/12 17:29:23
+Generated request: 740 7 3 40 at 2019/07/12 17:29:23
+Generated request: 625 3 5 150 at 2019/07/12 17:29:23
+Finished to process request: 880 2 10 449 at 2019/07/12 17:29:24
+Started to process request: 827 6 10 223 at 2019/07/12 17:29:24
+Generated request: 553 7 8 879 at 2019/07/12 17:29:24
+Generated request: 860 7 2 435 at 2019/07/12 17:29:24
+Generated request: 505 5 1 894 at 2019/07/12 17:29:24
+Finished to process request: 827 6 10 223 at 2019/07/12 17:29:24
+Started to process request: 765 4 10 492 at 2019/07/12 17:29:24
+Generated request: 576 4 1 969 at 2019/07/12 17:29:24
+Generated request: 777 5 3 65 at 2019/07/12 17:29:24
+Generated request: 509 7 2 366 at 2019/07/12 17:29:24
+Generated request: 12 7 2 294 at 2019/07/12 17:29:24
+Generated request: 631 1 3 921 at 2019/07/12 17:29:24
+Generated request: 366 6 9 614 at 2019/07/12 17:29:24
+Finished to process request: 765 4 10 492 at 2019/07/12 17:29:24
+Started to process request: 301 1 9 190 at 2019/07/12 17:29:24
+Finished to process request: 301 1 9 190 at 2019/07/12 17:29:24
+Started to process request: 383 4 9 760 at 2019/07/12 17:29:24
+Finished to process request: 383 4 9 760 at 2019/07/12 17:29:25
+Started to process request: 406 8 9 487 at 2019/07/12 17:29:25
+Finished to process request: 406 8 9 487 at 2019/07/12 17:29:26
+Started to process request: 366 6 9 614 at 2019/07/12 17:29:26
+Finished to process request: 366 6 9 614 at 2019/07/12 17:29:26
+Started to process request: 220 1 8 298 at 2019/07/12 17:29:26
+Finished to process request: 220 1 8 298 at 2019/07/12 17:29:27
+Started to process request: 553 7 8 879 at 2019/07/12 17:29:27
+Finished to process request: 553 7 8 879 at 2019/07/12 17:29:28
+Started to process request: 398 4 7 304 at 2019/07/12 17:29:28
+Finished to process request: 398 4 7 304 at 2019/07/12 17:29:28
+Started to process request: 158 5 7 150 at 2019/07/12 17:29:28
+Finished to process request: 158 5 7 150 at 2019/07/12 17:29:28
+Started to process request: 889 7 6 329 at 2019/07/12 17:29:28
+Finished to process request: 889 7 6 329 at 2019/07/12 17:29:28
+Started to process request: 176 3 6 479 at 2019/07/12 17:29:28
+Finished to process request: 176 3 6 479 at 2019/07/12 17:29:29
+Started to process request: 387 2 5 247 at 2019/07/12 17:29:29
+Finished to process request: 387 2 5 247 at 2019/07/12 17:29:29
+Started to process request: 625 3 5 150 at 2019/07/12 17:29:29
+Finished to process request: 625 3 5 150 at 2019/07/12 17:29:29
+Started to process request: 968 3 4 797 at 2019/07/12 17:29:29
+Finished to process request: 968 3 4 797 at 2019/07/12 17:29:30
+Started to process request: 967 3 4 531 at 2019/07/12 17:29:30
+Finished to process request: 967 3 4 531 at 2019/07/12 17:29:31
+Started to process request: 491 8 4 456 at 2019/07/12 17:29:31
+Finished to process request: 491 8 4 456 at 2019/07/12 17:29:31
+Started to process request: 658 1 4 436 at 2019/07/12 17:29:31
+Finished to process request: 658 1 4 436 at 2019/07/12 17:29:32
+Started to process request: 801 4 3 942 at 2019/07/12 17:29:32
+Finished to process request: 801 4 3 942 at 2019/07/12 17:29:32
+Started to process request: 740 7 3 40 at 2019/07/12 17:29:32
+Finished to process request: 740 7 3 40 at 2019/07/12 17:29:33
+Started to process request: 777 5 3 65 at 2019/07/12 17:29:33
+Finished to process request: 777 5 3 65 at 2019/07/12 17:29:33
+Started to process request: 631 1 3 921 at 2019/07/12 17:29:33
+Finished to process request: 631 1 3 921 at 2019/07/12 17:29:34
+Started to process request: 509 7 2 366 at 2019/07/12 17:29:34
+Finished to process request: 509 7 2 366 at 2019/07/12 17:29:34
+Started to process request: 860 7 2 435 at 2019/07/12 17:29:34
+Finished to process request: 860 7 2 435 at 2019/07/12 17:29:34
+Started to process request: 12 7 2 294 at 2019/07/12 17:29:34
+Finished to process request: 12 7 2 294 at 2019/07/12 17:29:35
+Started to process request: 234 7 1 35 at 2019/07/12 17:29:35
+Finished to process request: 234 7 1 35 at 2019/07/12 17:29:35
+Started to process request: 946 8 1 773 at 2019/07/12 17:29:35
+Finished to process request: 946 8 1 773 at 2019/07/12 17:29:35
+Started to process request: 89 8 1 674 at 2019/07/12 17:29:35
+Finished to process request: 89 8 1 674 at 2019/07/12 17:29:36
+Started to process request: 345 8 1 274 at 2019/07/12 17:29:36
+Finished to process request: 345 8 1 274 at 2019/07/12 17:29:36
+Started to process request: 505 5 1 894 at 2019/07/12 17:29:36
+Finished to process request: 505 5 1 894 at 2019/07/12 17:29:37
+Started to process request: 576 4 1 969 at 2019/07/12 17:29:37
+Finished to process request: 576 4 1 969 at 2019/07/12 17:29:38
+======================================================================================================================================================
+
+2) LinkedList 
+case one:"6 4 10 LinkedList result3"
+Generated request: 162 3 8 363 at 2019/07/12 17:32:25
+Generated request: 782 1 9 430 at 2019/07/12 17:32:25
+Generated request: 567 5 6 317 at 2019/07/12 17:32:25
+Generated request: 79 1 5 499 at 2019/07/12 17:32:25
+Generated request: 28 5 2 228 at 2019/07/12 17:32:25
+Generated request: 201 2 10 982 at 2019/07/12 17:32:25
+Generated request: 604 3 6 258 at 2019/07/12 17:32:25
+Generated request: 519 2 3 946 at 2019/07/12 17:32:25
+Generated request: 957 1 6 86 at 2019/07/12 17:32:25
+Generated request: 396 3 2 110 at 2019/07/12 17:32:25
+Generated request: 984 4 7 553 at 2019/07/12 17:32:25
+Generated request: 531 6 5 630 at 2019/07/12 17:32:25
+Finished to process request: 201 2 10 982 at 2019/07/12 17:32:27
+Finished to process request: 782 1 9 430 at 2019/07/12 17:32:27
+Finished to process request: 162 3 8 363 at 2019/07/12 17:32:28
+Finished to process request: 984 4 7 553 at 2019/07/12 17:32:28
+Finished to process request: 567 5 6 317 at 2019/07/12 17:32:28
+Finished to process request: 604 3 6 258 at 2019/07/12 17:32:29
+Finished to process request: 957 1 6 86 at 2019/07/12 17:32:29
+Finished to process request: 79 1 5 499 at 2019/07/12 17:32:29
+Finished to process request: 531 6 5 630 at 2019/07/12 17:32:30
+Finished to process request: 519 2 3 946 at 2019/07/12 17:32:31
+Finished to process request: 28 5 2 228 at 2019/07/12 17:32:31
+Finished to process request: 396 3 2 110 at 2019/07/12 17:32:31
+
+===================================================================================================
+case two: "8 20 30 LinkedList result4"
+Generated request: 833 6 9 233 at 2019/07/12 17:31:13
+Generated request: 877 5 10 322 at 2019/07/12 17:31:13
+Generated request: 375 8 4 396 at 2019/07/12 17:31:13
+Generated request: 96 3 4 421 at 2019/07/12 17:31:13
+Generated request: 913 3 6 562 at 2019/07/12 17:31:13
+Generated request: 754 3 1 477 at 2019/07/12 17:31:13
+Generated request: 101 7 4 183 at 2019/07/12 17:31:13
+Generated request: 28 2 7 482 at 2019/07/12 17:31:13
+Generated request: 931 7 5 680 at 2019/07/12 17:31:13
+Generated request: 495 3 7 229 at 2019/07/12 17:31:13
+Generated request: 442 6 6 112 at 2019/07/12 17:31:13
+Generated request: 379 6 8 727 at 2019/07/12 17:31:13
+Generated request: 572 2 4 520 at 2019/07/12 17:31:13
+Generated request: 527 8 3 614 at 2019/07/12 17:31:13
+Generated request: 655 7 3 789 at 2019/07/12 17:31:14
+Generated request: 15 4 9 238 at 2019/07/12 17:31:14
+Generated request: 840 7 6 71 at 2019/07/12 17:31:14
+Generated request: 510 3 6 31 at 2019/07/12 17:31:14
+Generated request: 687 3 8 363 at 2019/07/12 17:31:14
+Generated request: 480 6 6 104 at 2019/07/12 17:31:14
+Generated request: 724 6 6 559 at 2019/07/12 17:31:14
+Generated request: 41 2 8 984 at 2019/07/12 17:31:14
+Generated request: 991 4 6 651 at 2019/07/12 17:31:14
+Finished to process request: 877 5 10 322 at 2019/07/12 17:31:14
+Generated request: 561 3 9 21 at 2019/07/12 17:31:14
+Generated request: 236 7 4 520 at 2019/07/12 17:31:14
+Generated request: 26 8 6 870 at 2019/07/12 17:31:14
+Generated request: 690 7 2 741 at 2019/07/12 17:31:14
+Finished to process request: 833 6 9 233 at 2019/07/12 17:31:14
+Generated request: 641 6 6 894 at 2019/07/12 17:31:14
+Generated request: 448 3 3 697 at 2019/07/12 17:31:14
+Generated request: 567 5 6 836 at 2019/07/12 17:31:14
+Finished to process request: 15 4 9 238 at 2019/07/12 17:31:14
+Finished to process request: 561 3 9 21 at 2019/07/12 17:31:15
+Finished to process request: 379 6 8 727 at 2019/07/12 17:31:15
+Finished to process request: 41 2 8 984 at 2019/07/12 17:31:16
+Finished to process request: 687 3 8 363 at 2019/07/12 17:31:17
+Finished to process request: 28 2 7 482 at 2019/07/12 17:31:17
+Finished to process request: 495 3 7 229 at 2019/07/12 17:31:17
+Finished to process request: 913 3 6 562 at 2019/07/12 17:31:18
+Finished to process request: 442 6 6 112 at 2019/07/12 17:31:18
+Finished to process request: 510 3 6 31 at 2019/07/12 17:31:18
+Finished to process request: 840 7 6 71 at 2019/07/12 17:31:18
+Finished to process request: 724 6 6 559 at 2019/07/12 17:31:19
+Finished to process request: 480 6 6 104 at 2019/07/12 17:31:19
+Finished to process request: 26 8 6 870 at 2019/07/12 17:31:20
+Finished to process request: 991 4 6 651 at 2019/07/12 17:31:20
+Finished to process request: 567 5 6 836 at 2019/07/12 17:31:21
+Finished to process request: 641 6 6 894 at 2019/07/12 17:31:22
+Finished to process request: 931 7 5 680 at 2019/07/12 17:31:23
+Finished to process request: 96 3 4 421 at 2019/07/12 17:31:23
+Finished to process request: 375 8 4 396 at 2019/07/12 17:31:24
+Finished to process request: 101 7 4 183 at 2019/07/12 17:31:24
+Finished to process request: 572 2 4 520 at 2019/07/12 17:31:24
+Finished to process request: 236 7 4 520 at 2019/07/12 17:31:25
+Finished to process request: 527 8 3 614 at 2019/07/12 17:31:25
+Finished to process request: 655 7 3 789 at 2019/07/12 17:31:26
+Finished to process request: 448 3 3 697 at 2019/07/12 17:31:27
+Finished to process request: 690 7 2 741 at 2019/07/12 17:31:28
+Finished to process request: 754 3 1 477 at 2019/07/12 17:31:28
+
+============================================================================================================================================
+
+3)HashTable 
+case one "6 4 10 HashTable result3"
+Generated request: 780 4 1 807 at 2019/07/12 17:33:57
+Generated request: 552 4 8 437 at 2019/07/12 17:33:57
+Generated request: 301 1 4 140 at 2019/07/12 17:33:57
+Generated request: 498 5 9 364 at 2019/07/12 17:33:57
+Generated request: 494 1 8 172 at 2019/07/12 17:33:57
+Generated request: 108 2 6 583 at 2019/07/12 17:33:57
+Generated request: 614 3 8 148 at 2019/07/12 17:33:57
+Generated request: 294 3 3 795 at 2019/07/12 17:33:57
+Generated request: 404 1 7 950 at 2019/07/12 17:33:57
+Generated request: 135 2 5 165 at 2019/07/12 17:33:57
+Generated request: 389 6 9 458 at 2019/07/12 17:33:57
+Generated request: 708 4 9 246 at 2019/07/12 17:33:57
+Generated request: 735 6 2 280 at 2019/07/12 17:33:57
+Started to process request: 735 6 2 280 at 2019/07/12 17:33:58
+Finished to process request: 735 6 2 280 at 2019/07/12 17:33:58
+Started to process request: 135 2 5 165 at 2019/07/12 17:33:58
+Finished to process request: 135 2 5 165 at 2019/07/12 17:33:58
+Started to process request: 404 1 7 950 at 2019/07/12 17:33:58
+Finished to process request: 404 1 7 950 at 2019/07/12 17:33:59
+Started to process request: 614 3 8 148 at 2019/07/12 17:33:59
+Finished to process request: 614 3 8 148 at 2019/07/12 17:33:59
+Started to process request: 108 2 6 583 at 2019/07/12 17:33:59
+Finished to process request: 108 2 6 583 at 2019/07/12 17:34:00
+Started to process request: 301 1 4 140 at 2019/07/12 17:34:00
+Finished to process request: 301 1 4 140 at 2019/07/12 17:34:00
+Started to process request: 494 1 8 172 at 2019/07/12 17:34:00
+Finished to process request: 494 1 8 172 at 2019/07/12 17:34:00
+Started to process request: 552 4 8 437 at 2019/07/12 17:34:00
+Finished to process request: 552 4 8 437 at 2019/07/12 17:34:01
+Started to process request: 708 4 9 246 at 2019/07/12 17:34:01
+Finished to process request: 708 4 9 246 at 2019/07/12 17:34:01
+Started to process request: 389 6 9 458 at 2019/07/12 17:34:01
+Finished to process request: 389 6 9 458 at 2019/07/12 17:34:02
+Started to process request: 294 3 3 795 at 2019/07/12 17:34:02
+Finished to process request: 294 3 3 795 at 2019/07/12 17:34:02
+Started to process request: 498 5 9 364 at 2019/07/12 17:34:02
+Finished to process request: 498 5 9 364 at 2019/07/12 17:34:03
+Started to process request: 780 4 1 807 at 2019/07/12 17:34:03
+Finished to process request: 780 4 1 807 at 2019/07/12 17:34:04
+
+==========================================================================================
+
+case two "8 20 30 HashTable result4"
+Generated request: 910 6 5 792 at 2019/07/12 17:34:37
+Generated request: 126 4 5 911 at 2019/07/12 17:34:37
+Generated request: 174 1 2 756 at 2019/07/12 17:34:37
+Generated request: 406 8 6 248 at 2019/07/12 17:34:37
+Generated request: 599 1 3 58 at 2019/07/12 17:34:37
+Generated request: 530 8 1 388 at 2019/07/12 17:34:37
+Generated request: 35 2 2 360 at 2019/07/12 17:34:37
+Generated request: 800 5 2 102 at 2019/07/12 17:34:37
+Generated request: 767 3 8 297 at 2019/07/12 17:34:37
+Generated request: 898 4 9 232 at 2019/07/12 17:34:37
+Generated request: 336 7 7 829 at 2019/07/12 17:34:37
+Generated request: 534 7 10 407 at 2019/07/12 17:34:38
+Generated request: 316 8 8 101 at 2019/07/12 17:34:38
+Generated request: 480 8 8 756 at 2019/07/12 17:34:38
+Generated request: 38 7 6 627 at 2019/07/12 17:34:38
+Generated request: 456 7 1 620 at 2019/07/12 17:34:38
+Started to process request: 456 7 1 620 at 2019/07/12 17:34:38
+Generated request: 487 3 4 975 at 2019/07/12 17:34:38
+Generated request: 970 2 6 891 at 2019/07/12 17:34:38
+Generated request: 924 7 1 270 at 2019/07/12 17:34:38
+Generated request: 868 1 4 880 at 2019/07/12 17:34:38
+Generated request: 400 5 1 280 at 2019/07/12 17:34:38
+Generated request: 643 4 8 24 at 2019/07/12 17:34:38
+Generated request: 811 3 7 471 at 2019/07/12 17:34:38
+Generated request: 629 4 4 945 at 2019/07/12 17:34:38
+Generated request: 842 6 3 26 at 2019/07/12 17:34:39
+Generated request: 514 8 5 560 at 2019/07/12 17:34:39
+Generated request: 199 2 7 19 at 2019/07/12 17:34:39
+Finished to process request: 456 7 1 620 at 2019/07/12 17:34:39
+Started to process request: 400 5 1 280 at 2019/07/12 17:34:39
+Generated request: 747 7 1 534 at 2019/07/12 17:34:39
+Generated request: 890 8 8 437 at 2019/07/12 17:34:39
+Generated request: 821 4 6 234 at 2019/07/12 17:34:39
+Generated request: 982 7 1 444 at 2019/07/12 17:34:39
+Finished to process request: 400 5 1 280 at 2019/07/12 17:34:39
+Started to process request: 982 7 1 444 at 2019/07/12 17:34:39
+Finished to process request: 982 7 1 444 at 2019/07/12 17:34:39
+Started to process request: 747 7 1 534 at 2019/07/12 17:34:39
+Finished to process request: 747 7 1 534 at 2019/07/12 17:34:40
+Started to process request: 924 7 1 270 at 2019/07/12 17:34:40
+Finished to process request: 924 7 1 270 at 2019/07/12 17:34:40
+Started to process request: 174 1 2 756 at 2019/07/12 17:34:40
+Finished to process request: 174 1 2 756 at 2019/07/12 17:34:41
+Started to process request: 842 6 3 26 at 2019/07/12 17:34:41
+Finished to process request: 842 6 3 26 at 2019/07/12 17:34:41
+Started to process request: 629 4 4 945 at 2019/07/12 17:34:41
+Finished to process request: 629 4 4 945 at 2019/07/12 17:34:42
+Started to process request: 868 1 4 880 at 2019/07/12 17:34:42
+Finished to process request: 868 1 4 880 at 2019/07/12 17:34:43
+Started to process request: 530 8 1 388 at 2019/07/12 17:34:43
+Finished to process request: 530 8 1 388 at 2019/07/12 17:34:43
+Started to process request: 487 3 4 975 at 2019/07/12 17:34:43
+Finished to process request: 487 3 4 975 at 2019/07/12 17:34:44
+Started to process request: 514 8 5 560 at 2019/07/12 17:34:44
+Finished to process request: 514 8 5 560 at 2019/07/12 17:34:45
+Started to process request: 800 5 2 102 at 2019/07/12 17:34:45
+Finished to process request: 800 5 2 102 at 2019/07/12 17:34:45
+Started to process request: 599 1 3 58 at 2019/07/12 17:34:45
+Finished to process request: 599 1 3 58 at 2019/07/12 17:34:45
+Started to process request: 126 4 5 911 at 2019/07/12 17:34:45
+Finished to process request: 126 4 5 911 at 2019/07/12 17:34:46
+Started to process request: 821 4 6 234 at 2019/07/12 17:34:46
+Finished to process request: 821 4 6 234 at 2019/07/12 17:34:46
+Started to process request: 970 2 6 891 at 2019/07/12 17:34:46
+Finished to process request: 970 2 6 891 at 2019/07/12 17:34:47
+Started to process request: 910 6 5 792 at 2019/07/12 17:34:47
+Finished to process request: 910 6 5 792 at 2019/07/12 17:34:48
+Started to process request: 38 7 6 627 at 2019/07/12 17:34:48
+Finished to process request: 38 7 6 627 at 2019/07/12 17:34:48
+Started to process request: 406 8 6 248 at 2019/07/12 17:34:48
+Finished to process request: 406 8 6 248 at 2019/07/12 17:34:49
+Started to process request: 199 2 7 19 at 2019/07/12 17:34:49
+Finished to process request: 199 2 7 19 at 2019/07/12 17:34:49
+Started to process request: 811 3 7 471 at 2019/07/12 17:34:49
+Finished to process request: 811 3 7 471 at 2019/07/12 17:34:49
+Started to process request: 336 7 7 829 at 2019/07/12 17:34:49
+Finished to process request: 336 7 7 829 at 2019/07/12 17:34:50
+Started to process request: 890 8 8 437 at 2019/07/12 17:34:50
+Finished to process request: 890 8 8 437 at 2019/07/12 17:34:51
+Started to process request: 643 4 8 24 at 2019/07/12 17:34:51
+Finished to process request: 643 4 8 24 at 2019/07/12 17:34:51
+Started to process request: 316 8 8 101 at 2019/07/12 17:34:51
+Finished to process request: 316 8 8 101 at 2019/07/12 17:34:51
+Started to process request: 35 2 2 360 at 2019/07/12 17:34:51
+Finished to process request: 35 2 2 360 at 2019/07/12 17:34:51
+Started to process request: 480 8 8 756 at 2019/07/12 17:34:51
+Finished to process request: 480 8 8 756 at 2019/07/12 17:34:52
+Started to process request: 767 3 8 297 at 2019/07/12 17:34:52
+Finished to process request: 767 3 8 297 at 2019/07/12 17:34:52
+Started to process request: 898 4 9 232 at 2019/07/12 17:34:52
+Finished to process request: 898 4 9 232 at 2019/07/12 17:34:52
+Started to process request: 534 7 10 407 at 2019/07/12 17:34:52
+Finished to process request: 534 7 10 407 at 2019/07/12 17:34:53
+
+=================================================================================================================================================
+
+4) PriorityQueue
+case one:"6 4 10 PriorityQueue result3"
+Generated request: 761 6 10 939  at2019/07/12 17:50:37
+Generated request: 721 1 2 614  at2019/07/12 17:50:37
+Started to process request: 761 6 10 939  at2019/07/12 17:50:37
+Finished to process request: 761 6 10 939  at2019/07/12 17:50:37
+Generated request: 811 1 7 989  at2019/07/12 17:50:37
+Started to process request: 721 1 2 614  at2019/07/12 17:50:37
+Finished to process request: 721 1 2 614  at2019/07/12 17:50:37
+Generated request: 211 4 6 961  at2019/07/12 17:50:37
+Generated request: 305 4 10 257  at2019/07/12 17:50:37
+Generated request: 436 5 3 61  at2019/07/12 17:50:40
+Started to process request: 811 1 7 989  at2019/07/12 17:50:37
+Finished to process request: 811 1 7 989  at2019/07/12 17:50:37
+Started to process request: 305 4 10 257  at2019/07/12 17:50:37
+Finished to process request: 305 4 10 257  at2019/07/12 17:50:37
+Generated request: 193 4 3 779  at2019/07/12 17:50:40
+Generated request: 110 6 9 257  at2019/07/12 17:50:40
+Started to process request: 211 4 6 961  at2019/07/12 17:50:37
+Finished to process request: 211 4 6 961  at2019/07/12 17:50:37
+Generated request: 63 6 10 42  at2019/07/12 17:50:41
+Started to process request: 110 6 9 257  at2019/07/12 17:50:40
+Finished to process request: 110 6 9 257  at2019/07/12 17:50:40
+Started to process request: 63 6 10 42  at2019/07/12 17:50:41
+Finished to process request: 63 6 10 42  at2019/07/12 17:50:41
+Generated request: 273 6 2 558  at2019/07/12 17:50:41
+Started to process request: 193 4 3 779  at2019/07/12 17:50:40
+Finished to process request: 193 4 3 779  at2019/07/12 17:50:40
+Started to process request: 436 5 3 61  at2019/07/12 17:50:40
+Finished to process request: 436 5 3 61  at2019/07/12 17:50:40
+Started to process request: 273 6 2 558  at2019/07/12 17:50:41
+Finished to process request: 273 6 2 558  at2019/07/12 17:50:41
+
+
+=========================================================================
+
+case two:"8 20 30 PriorityQueue result3"
+
+Generated request: 404 1 6 553  at2019/07/12 17:56:55
+Generated request: 928 7 9 868  at2019/07/12 17:56:56
+Started to process request: 404 1 6 553  at2019/07/12 17:56:55
+Finished to process request: 404 1 6 553  at2019/07/12 17:56:55
+Generated request: 203 7 4 836  at2019/07/12 17:56:56
+Started to process request: 928 7 9 868  at2019/07/12 17:56:56
+Finished to process request: 928 7 9 868  at2019/07/12 17:56:56
+Generated request: 429 4 5 741  at2019/07/12 17:56:56
+Generated request: 380 3 7 391  at2019/07/12 17:56:57
+Generated request: 352 6 3 309  at2019/07/12 17:56:57
+Started to process request: 203 7 4 836  at2019/07/12 17:56:56
+Finished to process request: 203 7 4 836  at2019/07/12 17:56:56
+Generated request: 409 5 4 108  at2019/07/12 17:56:57
+Started to process request: 380 3 7 391  at2019/07/12 17:56:57
+Finished to process request: 380 3 7 391  at2019/07/12 17:56:57
+Generated request: 758 7 1 65  at2019/07/12 17:56:57
+Started to process request: 429 4 5 741  at2019/07/12 17:56:56
+Finished to process request: 429 4 5 741  at2019/07/12 17:56:56
+Generated request: 208 5 1 195  at2019/07/12 17:56:59
+Started to process request: 409 5 4 108  at2019/07/12 17:56:57
+Finished to process request: 409 5 4 108  at2019/07/12 17:56:57
+Generated request: 8 2 1 262  at2019/07/12 17:56:59
+Started to process request: 352 6 3 309  at2019/07/12 17:56:57
+Finished to process request: 352 6 3 309  at2019/07/12 17:56:57
+Generated request: 211 1 7 568  at2019/07/12 17:56:59
+Started to process request: 758 7 1 65  at2019/07/12 17:56:57
+Finished to process request: 758 7 1 65  at2019/07/12 17:56:57
+Generated request: 257 7 8 186  at2019/07/12 17:56:59
+Started to process request: 211 1 7 568  at2019/07/12 17:56:59
+Finished to process request: 211 1 7 568  at2019/07/12 17:56:59
+Started to process request: 257 7 8 186  at2019/07/12 17:56:59
+Finished to process request: 257 7 8 186  at2019/07/12 17:56:59
+Generated request: 989 6 5 930  at2019/07/12 17:56:59
+Started to process request: 8 2 1 262  at2019/07/12 17:56:59
+Finished to process request: 8 2 1 262  at2019/07/12 17:56:59
+Generated request: 546 8 10 886  at2019/07/12 17:57:01
+Started to process request: 989 6 5 930  at2019/07/12 17:56:59
+Finished to process request: 989 6 5 930  at2019/07/12 17:56:59
+Generated request: 612 3 1 192  at2019/07/12 17:57:01
+Generated request: 576 2 2 397  at2019/07/12 17:57:01
+Started to process request: 546 8 10 886  at2019/07/12 17:57:01
+Finished to process request: 546 8 10 886  at2019/07/12 17:57:01
+Generated request: 125 4 5 947  at2019/07/12 17:57:01
+Started to process request: 576 2 2 397  at2019/07/12 17:57:01
+Finished to process request: 576 2 2 397  at2019/07/12 17:57:01
+Generated request: 234 1 2 971  at2019/07/12 17:57:01
+Started to process request: 125 4 5 947  at2019/07/12 17:57:01
+Finished to process request: 125 4 5 947  at2019/07/12 17:57:01
+Generated request: 683 5 2 768  at2019/07/12 17:57:04
+Started to process request: 234 1 2 971  at2019/07/12 17:57:01
+Finished to process request: 234 1 2 971  at2019/07/12 17:57:01
+Generated request: 105 3 2 962  at2019/07/12 17:57:04
+Generated request: 948 3 6 128  at2019/07/12 17:57:05
+Started to process request: 683 5 2 768  at2019/07/12 17:57:04
+Finished to process request: 683 5 2 768  at2019/07/12 17:57:04
+Generated request: 858 4 7 737  at2019/07/12 17:57:05
+Started to process request: 948 3 6 128  at2019/07/12 17:57:05
+Finished to process request: 948 3 6 128  at2019/07/12 17:57:05
+Generated request: 482 1 10 85  at2019/07/12 17:57:05
+Started to process request: 858 4 7 737  at2019/07/12 17:57:05
+Finished to process request: 858 4 7 737  at2019/07/12 17:57:05
+Started to process request: 482 1 10 85  at2019/07/12 17:57:05
+Finished to process request: 482 1 10 85  at2019/07/12 17:57:05
+Generated request: 256 8 8 609  at2019/07/12 17:57:05
+Started to process request: 105 3 2 962  at2019/07/12 17:57:04
+Finished to process request: 105 3 2 962  at2019/07/12 17:57:04
+Generated request: 478 5 7 231  at2019/07/12 17:57:05
+Generated request: 823 3 5 106  at2019/07/12 17:57:08
+Started to process request: 256 8 8 609  at2019/07/12 17:57:05
+Finished to process request: 256 8 8 609  at2019/07/12 17:57:05
+Generated request: 488 3 1 310  at2019/07/12 17:57:08
+Generated request: 900 4 3 85  at2019/07/12 17:57:08
+Started to process request: 478 5 7 231  at2019/07/12 17:57:05
+Finished to process request: 478 5 7 231  at2019/07/12 17:57:05
+Started to process request: 823 3 5 106  at2019/07/12 17:57:08
+Finished to process request: 823 3 5 106  at2019/07/12 17:57:08
+Generated request: 301 5 8 526  at2019/07/12 17:57:08
+Started to process request: 900 4 3 85  at2019/07/12 17:57:08
+Finished to process request: 900 4 3 85  at2019/07/12 17:57:08
+Generated request: 228 3 1 167  at2019/07/12 17:57:09
+Started to process request: 301 5 8 526  at2019/07/12 17:57:08
+Finished to process request: 301 5 8 526  at2019/07/12 17:57:08
+Started to process request: 208 5 1 195  at2019/07/12 17:56:59
+Finished to process request: 208 5 1 195  at2019/07/12 17:56:59
+Started to process request: 612 3 1 192  at2019/07/12 17:57:01
+Finished to process request: 612 3 1 192  at2019/07/12 17:57:01
+Generated request: 216 8 6 726  at2019/07/12 17:57:09
+Started to process request: 488 3 1 310  at2019/07/12 17:57:08
+Finished to process request: 488 3 1 310  at2019/07/12 17:57:08
+Started to process request: 216 8 6 726  at2019/07/12 17:57:09
+Finished to process request: 216 8 6 726  at2019/07/12 17:57:09
+Started to process request: 228 3 1 167  at2019/07/12 17:57:09
+Finished to process request: 228 3 1 167  at2019/07/12 17:57:09
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
