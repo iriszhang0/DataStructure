@@ -1,0 +1,93 @@
+README for week3 Programming:
+
+1. the overall structure of your project (what classes you used and you broke down the given tasks)
+
+First, we write a class for UnboundedArray, which is the main data structure that we use to get the targeted character.
+In this class, we define methods like Reallocate,Grow, and Shrink as we discussed in class. 
+
+Second, in the Group3_week3 class, we write a method "NextString" to get all the characters followed by the the "seeds" while store every possible element in an unboundedarray.
+And, the method "getPopularElement" is to return the element that is the most frequently occurring and is used in NextString so that NextString can directly return the targeted character.
+Another method is "FindFirst", which is used to random a string with the length of k, which is used in the main method not only to find the "initial seed" but also to get a new start seed when we reach the situation that there is no character to choose from. 
+In the main method, we first read in the file whose name is from the command line argument, and then convert it into an unboundedarrray which holds every single charater in the file;
+after that, we randomly generate a string with length of k; we keep on tracking the NextString and add it to the final result which size is determined in command line argument. 
+Then, we make our result in a string and convert it into a file whose name is also from the command line argument.
+To avoid the possible mistakes, we check the types of each command line argument also the length of the input file. 
+
+Test:
+We use five .txt files to test our code
+
+1.The first file is 59811-0.txt
+	We choose k=4 length=4 59811-0.txt result1 as four commandline argument.
+	The total time used is 83804735 nanoseconds. 
+	The following are the content we get in our result1 file 
+	======================================================================================================
+	esss
+	======================================================================================================
+
+	we choose k=10 length=15 59811-0.txt result2 as four commandline argument.
+	the total time used is 109712657 nanoseconds.
+	The following are the content we get in our result2 file 
+	======================================================================================================
+	ARRRRRRRRRTAAAA
+	======================================================================================================
+
+	we choose k=10 length=5 59811-0.txt result3 as four commandline argument.
+
+	The following is the error message we get
+	======================================================================================================
+	ERROR the length must greater or equal to k
+	======================================================================================================
+
+
+2.The second file is 59819-0.txt
+	We choose k=4 length=4 598190-0.txt result4 as four commandline argument.
+	The total time used is 151363168 nanoseconds.
+	The following are the content we get in our result4 file
+	======================================================================================================
+	addd
+	======================================================================================================
+
+	We choose k=10 length=15 59819-0.txt result5 as four commandline argument.
+	The total time used is 672804438 nanoseconds.
+	The following are the content we get in our result5 file
+	======================================================================================================
+	beeeeeeeeer  
+	======================================================================================================
+
+	We choose k=10 length=5 59819-0.txt result6 as four commandline argument.
+	
+	The following is the error message we get
+	======================================================================================================
+	ERROR the length must greater or equal to k
+	======================================================================================================
+	
+
+3.The third file is the special case we created specialCase.txt
+	We choose k=3 length=5 specialCase.txt result7 as four commandline argument
+	The following are the result we get
+	The total time used is 41965404
+	======================================================================================================
+	whhat
+	======================================================================================================
+
+	We choose k=6 length=6 specialCase.txt result 8 as four commandline argument
+	The following is the error message we get
+	======================================================================================================
+	ERROR the txt file length is not enough to execute the program
+	======================================================================================================
+	
+We also check the command line argument(ERROR HANDLE)
+1. The input for args[0] and args[1] must be integer or the code will stop and send error message to the user
+
+2. The args[2] and args[3] must show up in the command line arguments or the code will stop and send error message to the user
+
+
+
+
+
+
+
+
+
+
+
